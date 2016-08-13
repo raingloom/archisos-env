@@ -1,6 +1,5 @@
 #!/bin/bash
 if [ ! $USER = tux ]; then
-	pacman -S zsh grml-zsh-config
 	usermod -s /bin/zsh root
 	useradd -m -s /bin/zsh -U -G wheel,users tux
 	
