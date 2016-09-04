@@ -1,19 +1,22 @@
 #!/bin/bash
 set -x
 if [ ! $USER = tux ]; then
-	usermod -s /bin/zsh root
-	useradd -m -s /bin/zsh -U -G wheel,users tux
+	#############
+	#GLOBAL SETUP
+	#############
+	usermod -s /bin/zsh root #set zsh as default shell
+	useradd -m -s /bin/zsh -U -G wheel,users tux #add unprivileged user
 	
 	mkdir -p tmp
 	cd tmp
 		echo '#!/bin/sh' >> editsudo.sh
-		echo 'echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> $2' >> editsudo.sh
+		echo 'echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> $2' >> editsudo.sh #allow unpriviliged user to run ANYTHING as root without a password
 		chmod +x editsudo.sh
 		VISUAL="$PWD/editsudo.sh" visudo
 	cd ..
-	cp $0 /home/tux
+	cp "$0" /home/tux
 	cd /home/tux
-	su -c /home/tux/$0 tux
+	su -c "/home/tux/$(basename "$0")" tux
 else
 	mkdir -p tmp
 	cd tmp
