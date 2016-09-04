@@ -51,7 +51,7 @@ init() {
 
 root-base() {
 	btrfs subvolume create "$container"
-	pacstrap -d "$container" base base-devel zsh grml-zsh-config --ignore linux
+	pacstrap -d "$container" base base-devel zsh grml-zsh-config btrfs-progs --ignore linux
 }
 
 root-setup() {
