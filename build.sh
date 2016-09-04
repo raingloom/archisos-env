@@ -41,17 +41,20 @@ nspawn() {
 	sudo systemd-nspawn --directory "$container" --chdir="/root/repo" $@
 }
 
-xnspawn() {
-	nspawn $@
-}
-
 init() {
 	mkdir "$work"
 	mkdir "${work}/snapshots"
+}
+
+root-base() {
 	btrfs subvolume create "$container"
-	pacstrap -d "$container" base base-devel zsh grml-zsh-config --ignore linux 
+	pacstrap -d "$container" base base-devel zsh grml-zsh-config --ignore linux
+}
+
+root-setup() {
 	cp -rvfT "${here}/copied" "${container}/root"
 	cp -rvT "$repo" "${container}/root/repo"
+	nspawn ./container-setup.sh
 }
 
 mkautologin() {
