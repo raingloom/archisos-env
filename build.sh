@@ -54,7 +54,7 @@ root-base() {
 root-setup() {
 	cp -rvfT "${here}/copied" "${container}/root"
 	cp -rvT "$repo" "${container}/root/repo"
-	nspawn ./container-setup.sh
+	nspawn /root/container-setup.sh
 }
 
 mkautologin() {
