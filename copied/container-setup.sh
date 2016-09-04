@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 if [ ! $USER = tux ]; then
 	usermod -s /bin/zsh root
 	useradd -m -s /bin/zsh -U -G wheel,users tux
