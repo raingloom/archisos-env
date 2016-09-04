@@ -1,4 +1,5 @@
 #!/bin/zsh
+set -x
 if [ "$EUID" -ne 0 ]
 then
 #not running as root, re-run with sudo
@@ -21,9 +22,11 @@ container="${here}/container"
 repo="${here}/repo"
 
 snap() {
-	local rw=""
-	[[ $1 = '-w' ]] && rw="" || rw="-r"
-	btrfs subvolume snapshot $rw "$container" "${work}/snapshots/$(date +%s)"
+	if [ ! -z $1 ]; then
+		#$1 is an optional suffix
+		1="-${1}"
+	fi
+	btrfs subvolume snapshot -r "$container" "${work}/snapshots/$(date +%s)${1}"
 }
 
 run-once() {
@@ -38,7 +41,7 @@ run-once() {
 }
 
 nspawn() {
-	sudo systemd-nspawn --directory "$container" --chdir="/root/repo" $@
+	sudo systemd-nspawn --directory "$container" --chdir="/root/repo/releng" $@
 }
 
 init() {
@@ -71,7 +74,12 @@ cleanup() {
 }
 
 buildiso() {
-	xnspawn "releng/fullbuild.sh"
+	nspawn "/root/buildiso.sh"
+}
+
+run-then-snap() {
+	$@
+	snap "$@"
 }
 
 ###################################
