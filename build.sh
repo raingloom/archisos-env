@@ -41,7 +41,7 @@ run-once() {
 }
 
 nspawn() {
-	sudo systemd-nspawn --directory "$container" --chdir="/root/repo/releng" $@
+	sudo systemd-nspawn --directory "$container" --chdir="/root" $@
 }
 
 init() {
@@ -56,8 +56,9 @@ root-base() {
 
 root-setup() {
 	cp -rvfT "${here}/copied" "${container}/root"
-	cp -rvT "$repo" "${container}/root/repo"
+	cp -rvT "$repo" "${container}/home/tux/repo"
 	nspawn /root/container-setup.sh
+	nspawn chown tux:tux --recursive --verbose "/home/tux"
 }
 
 mkautologin() {
@@ -74,12 +75,21 @@ cleanup() {
 }
 
 buildiso() {
-	nspawn "/root/buildiso.sh"
+	nspawn "/home/tux/buildiso.sh"
 }
 
 run-then-snap() {
 	$@
 	snap "$@"
+}
+
+rollback() {
+	if btrfs subvolume show "$1" &> /dev/null; then
+		btrfs subvolume delete "$container"
+		btrfs subvolume snapshot "$1" "$container"
+	else
+		echo "$1 is not a valid btrfs subvolume" 1>&2
+	fi
 }
 
 ###################################
