@@ -1,5 +1,5 @@
 #!/bin/zsh
-set -x
+set -x -e
 if [ "$EUID" -ne 0 ]
 then
 #not running as root, re-run with sudo
@@ -85,7 +85,7 @@ run-then-snap() {
 
 rollback() {
 	if btrfs subvolume show "$1" &> /dev/null; then
-		btrfs subvolume delete "$container"
+		btrfs subvolume delete "$container" || true
 		btrfs subvolume snapshot "$1" "$container"
 	else
 		echo "$1 is not a valid btrfs subvolume" 1>&2
