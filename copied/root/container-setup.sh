@@ -22,8 +22,8 @@ else
 	cd tmp
 		curl -O https://aur.archlinux.org/cgit/aur.git/snapshot/cower.tar.gz
 		curl -O https://aur.archlinux.org/cgit/aur.git/snapshot/pacaur.tar.gz
-		tar xvf cower.tar.gz
-		tar xvf pacaur.tar.gz
+		tar xf cower.tar.gz
+		tar xf pacaur.tar.gz
 		gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
 		mkpkg="makepkg -sri --noconfirm"
 		cd cower
