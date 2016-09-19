@@ -16,6 +16,7 @@ if [ ! $USER = tux ]; then
 	cd ..
 	cp "$0" /home/tux
 	cd /home/tux
+	chown -R tux:tux .
 	su -c "/home/tux/$(basename "$0")" tux
 else
 	mkdir -p tmp
