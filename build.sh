@@ -55,8 +55,8 @@ root-base() {
 }
 
 root-setup() {
-	cp -rvfuT "${here}/copied" "$container"
-	cp -rvT "$repo" "${container}/home/tux/repo"
+	cp -rfuT "${here}/copied" "$container"
+	cp -rT "$repo" "${container}/home/tux/repo"
 	nspawn /root/container-setup.sh
 	nspawn chown tux:tux --recursive --verbose "/home/tux"
 }
